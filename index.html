@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Quiz App</title>
-<link rel="stylesheet" href="style.css">
-</head>
-
 <body>
 
-<div class="quiz-container">
-<h2 id="question">Question</h2>
+<h2>Real-Time Chat</h2>
 
-<div id="answers">
-<button class="option">Option 1</button>
-<button class="option">Option 2</button>
-<button class="option">Option 3</button>
-<button class="option">Option 4</button>
-</div>
+<ul id="messages"></ul>
 
-<button id="next">Next</button>
+<input id="msg" placeholder="Type message">
+<button onclick="send()">Send</button>
 
-<h3 id="score"></h3>
-</div>
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
-<script src="script.js"></script>
+<script>
+const socket = io("http://localhost:3000");
+
+function send(){
+let input=document.getElementById("msg");
+socket.emit("chat message",input.value);
+input.value="";
+}
+
+socket.on("chat message",function(msg){
+let li=document.createElement("li");
+li.textContent=msg;
+document.getElementById("messages").appendChild(li);
+});
+</script>
 
 </body>
 </html>
